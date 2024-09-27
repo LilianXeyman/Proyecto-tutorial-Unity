@@ -10,7 +10,9 @@ public class PlayerBehaviour : MonoBehaviour
     public float movementSpeed = 5f;
     public int CuentaDeMonedas = 0;
     public TextMeshProUGUI coinsText;
-   
+    public AudioClip coinSFX;
+    public AudioClip especialcoinSFX;
+    
     
     // Start is called before the first frame update
     void Start()
@@ -31,6 +33,8 @@ public class PlayerBehaviour : MonoBehaviour
         movement.z = Input.GetAxis("Vertical");
 
         rb.AddForce(movement * movementSpeed * Time.deltaTime, ForceMode.Impulse);
+
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -40,18 +44,21 @@ public class PlayerBehaviour : MonoBehaviour
             Debug.Log("He chocado con una moneda");
             CuentaDeMonedas = CuentaDeMonedas + 1;
             Debug.Log("Tienes " + CuentaDeMonedas + " monedas ");
+            AudioSource.PlayClipAtPoint(coinSFX, transform.position);
         }
         else if(other.CompareTag("MonedaEspecial"))
         {
             Debug.Log("He tocado una moneda especial");
             CuentaDeMonedas += 5;
             Debug.Log("Tienes " + CuentaDeMonedas + " monedas ");
+            AudioSource.PlayClipAtPoint(especialcoinSFX, transform.position);
         }
 
         if (other.tag.Contains("Moneda"))
         {
             coinsText.text = CuentaDeMonedas.ToString();
             other.gameObject.SetActive(false);
+            
         }
     }
     
